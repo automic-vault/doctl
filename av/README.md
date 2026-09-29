@@ -30,7 +30,9 @@ finishing signed end-to-end installation/credential-delivery validation.
 `catalog.go` walks the actual upstream Cobra tree, including aliases, while
 excluding local commands, plugins, apps dev, serverless support and new command
 families pending review. Against upstream commit
-`776faec72dd6e13556f37340f068fd76b16ad575`, it emits the 470 lines used by AV:
+`776faec72dd6e13556f37340f068fd76b16ad575`, it emits the 469 lines used by AV:
+
+Copy `av/catalog.go` into the pinned upstream checkout before running:
 
 ```sh
 go run -mod=vendor av/catalog.go > doctl-commands.txt

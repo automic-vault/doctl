@@ -23,7 +23,7 @@ func main() {
 			p := append(append([]string{}, path...), child.Name())
 			a := append(append([]string{}, aliasPath...), strings.Join(append([]string{child.Name()}, child.Aliases...), "|"))
 			canonical := strings.Join(p, " ")
-			excluded := canonical == "auth list" || canonical == "auth remove" || canonical == "auth switch" || canonical == "apps spec validate" || strings.HasPrefix(canonical, "apps dev ") || strings.HasPrefix(canonical, "compute plugin ")
+			excluded := canonical == "gradient knowledge-base" || canonical == "auth list" || canonical == "auth remove" || canonical == "auth switch" || canonical == "apps spec validate" || strings.HasPrefix(canonical, "apps dev ") || strings.HasPrefix(canonical, "compute plugin ")
 			if child.Runnable() && allowed[p[0]] && !excluded {
 				lines = append(lines, strings.Join(a, " "))
 			}

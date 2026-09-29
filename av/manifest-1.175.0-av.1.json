@@ -1,0 +1,18 @@
+{
+  "upstream_version": "1.175.0",
+  "release": "1.175.0-av.1",
+  "artifacts": {
+    "arm64": {
+      "name": "doctl-1.175.0-av.1-darwin-arm64.tar.gz",
+      "archive_sha256": "a4565466d4541c7e223d338c7c7647b2bf22088e4103d3c534e050e6ae64f3b5",
+      "binary_sha256": "9c762b2b1167dab0d799dffdd82c6c47c946b6451171c7d63e0de70e370c6fbd",
+      "upstream_archive_sha256": "68493d57c3868e23ad1abdffa01977314c3d9b12b5cfcfdc1db924c8b81a5924"
+    },
+    "amd64": {
+      "name": "doctl-1.175.0-av.1-darwin-amd64.tar.gz",
+      "archive_sha256": "cd227796d404f9dfb23d88bee85ce7d21ff5d78a974243050d378e783a5bf2a4",
+      "binary_sha256": "6e6cf4e285b88ac9f679749e99e23319d305f02018840555b01387291f236dc5",
+      "upstream_archive_sha256": "167eb4474e864e07fa3a04e9ab5feb94812e64d993299e81831cdfb34f91cc25"
+    }
+  }
+}

@@ -1,5 +1,9 @@
 # Automic Vault signed doctl releases
 
+> This directory records the initial `v1.175.0-av.1` one-off release. Maintained
+> releases now use the repository-root `automic-vault.yml` and the composable
+> Isotope release builder.
+
 This fork repacks upstream doctl executables with Automic Vault's Developer ID.
 It does not patch executable code or add a credential protocol. The AV Hardener
 owns protected installation, native token routing, verification and migration.

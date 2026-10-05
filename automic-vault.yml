@@ -1,0 +1,60 @@
+name:
+  isotope:doctl
+
+replaces:
+  brew:doctl
+
+build: |
+  case "$TAG" in
+    v1.177.0)
+      arm64_sha256=8fd0046662e8421684349458c5c23de5b1beacbfd9d2b0cd8309dc190a12bc34
+      amd64_sha256=58b5e6d4aba30bcda8b05a9c8781b090d4c475546d4269380f355a476a3dbd89
+      ;;
+    *)
+      echo "Unreviewed doctl release: $TAG" >&2
+      exit 1
+      ;;
+  esac
+
+  work="$(mktemp -d "${TMPDIR:-/tmp}/doctl-isotope.XXXXXX")"
+  trap 'rm -rf "$work"' EXIT
+  mkdir -p bin
+
+  for arch in arm64 amd64; do
+    archive="$work/doctl-$arch.tar.gz"
+    expected_var="${arch}_sha256"
+    expected="${!expected_var}"
+    curl --fail --location --silent --show-error \
+      --output "$archive" \
+      "https://github.com/digitalocean/doctl/releases/download/$TAG/doctl-${VERSION}-darwin-${arch}.tar.gz"
+    printf '%s  %s\n' "$expected" "$archive" | shasum -a 256 -c -
+    test "$(tar -tzf "$archive")" = doctl
+    tar -xOzf "$archive" doctl >"bin/doctl-$arch"
+    chmod 755 "bin/doctl-$arch"
+    file "bin/doctl-$arch" | grep -q "${arch/amd64/x86_64}"
+    if otool -L "bin/doctl-$arch" | tail -n +2 | awk '{ print $1 }' |
+      grep -Ev '^(/usr/lib/|/System/Library/)'; then
+      echo "doctl $arch links a non-system library" >&2
+      exit 1
+    fi
+    codesign --force --options runtime --timestamp \
+      --identifier doctl \
+      --sign "$CODESIGN_IDENTITY" \
+      "bin/doctl-$arch"
+    test -z "$(codesign -d --entitlements :- "bin/doctl-$arch" 2>/dev/null)"
+  done
+
+  tar czf out.tgz bin/doctl-arm64 bin/doctl-amd64
+
+justification:
+  title:
+    Unprotected Credential Access
+  detail: |
+    Upstream doctl stores DigitalOcean access tokens in plaintext configuration,
+    and its official macOS executables are only ad-hoc signed.
+
+    This Isotope pins the reviewed upstream executables for both macOS
+    architectures and signs them with Hardened Runtime and no entitlements. The
+    Automic Vault Hardener installs the selected executable as a protected
+    Target, migrates the default-context token into custody, and routes reviewed
+    commands through doctl's Tool-specific Secret Gate.

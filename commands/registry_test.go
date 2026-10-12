@@ -18,6 +18,7 @@ import (
 	"errors"
 	"fmt"
 	"os"
+	"path/filepath"
 	"strings"
 	"testing"
 	"time"
@@ -701,6 +702,11 @@ func TestRegistryLogin(t *testing.T) {
 				config.Out = os.Stderr
 				err := RunRegistryLogin(config)
 				assert.Equal(t, test.err, err)
+				if test.err == nil {
+					contents, err := os.ReadFile(filepath.Join(os.Getenv("HOME"), ".docker", "config.json"))
+					assert.NoError(t, err)
+					assert.JSONEq(t, string(testDockerCredentials.DockerConfigJSON), string(contents))
+				}
 			})
 		})
 	}

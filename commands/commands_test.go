@@ -15,10 +15,12 @@ package commands
 
 import (
 	"io"
+	"path/filepath"
 	"testing"
 	"time"
 
 	"github.com/digitalocean/godo"
+	dockerconf "github.com/docker/cli/cli/config"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 	"github.com/stretchr/testify/assert"
@@ -307,6 +309,14 @@ type tcMocks struct {
 }
 
 func withTestClient(t *testing.T, tFn testFn) {
+	home := t.TempDir()
+	t.Setenv("HOME", home)
+	t.Setenv("DOCKER_CONFIG", filepath.Join(home, ".docker"))
+	// Docker caches its config directory across tests, independently of HOME.
+	previousDockerDir := dockerconf.Dir()
+	dockerconf.SetDir(filepath.Join(home, ".docker"))
+	t.Cleanup(func() { dockerconf.SetDir(previousDockerDir) })
+
 	ctrl := gomock.NewController(t)
 	defer ctrl.Finish()
 

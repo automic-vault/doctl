@@ -6,6 +6,10 @@ replaces:
 
 build: |
   case "$TAG" in
+    v2.7.0)
+      arm64_sha256=2334472bc32aba206c9b8ef35e803c729750ad9d81d05667051f2b6446a9cd86
+      amd64_sha256=7d59e53d55abb5563aec92e41dc346ad74ebd76e0d1b38935604dd0d4c727419
+      ;;
     v2.6.0)
       arm64_sha256=8c8f2b55abd9ab046f4f647ceab8c47c4c8e59116492ef9c15af4578602d1387
       amd64_sha256=66fb8e8b6db0b1150a6923c085b13109356f1c7db663fbcefea92551f82faaf4
